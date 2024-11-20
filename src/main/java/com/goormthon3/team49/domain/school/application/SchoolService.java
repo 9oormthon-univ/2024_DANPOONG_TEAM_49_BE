@@ -33,7 +33,7 @@ public class SchoolService {
         }
 
         if (closestSchool == null) {
-            throw new SchoolNotFoundException("반경 " + RADIUS + "km 내에 학교가 없습니다.");
+            throw new SchoolNotFoundException();
         }
 
         return SchoolResponse.of(closestSchool.getSchoolName());
