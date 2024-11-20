@@ -26,8 +26,9 @@ springdoc:
   default-consumes-media-type: application/json  # REST API ???? ?? Content-Type? JSON?? ??
   default-produces-media-type: application/json  # REST API ???? ?? Content-Type? JSON?? ??
 
-
-
+kakao:
+  client_id: {REST API KEY}
+  redirect_uri: ${KAKAO_REDIRECT_URI:http://localhost:8080/callback}
 
 
 
