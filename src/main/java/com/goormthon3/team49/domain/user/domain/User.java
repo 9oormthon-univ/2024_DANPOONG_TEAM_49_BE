@@ -40,8 +40,8 @@ public class User {
     @Column(updatable = false)
     private Timestamp createdAt;
 
-    @Column(nullable = false)
-    private Long profileId;     //user_image table implementation and modification required
+    @Column(length = 255)
+    private String profileImageUri;
 
     @PrePersist
     public void prePersist() {

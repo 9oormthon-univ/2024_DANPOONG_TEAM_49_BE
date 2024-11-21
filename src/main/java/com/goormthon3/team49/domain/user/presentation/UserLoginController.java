@@ -1,6 +1,7 @@
 package com.goormthon3.team49.domain.user.presentation;
 
 import com.goormthon3.team49.domain.user.application.UserLoginService;
+import com.goormthon3.team49.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class UserLoginController {
 
     @GetMapping("/token")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authorization) {
+
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             return new ResponseEntity<>("Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
         }
@@ -46,16 +48,34 @@ public class UserLoginController {
         String accessToken = authorization.substring(7);
         UserInfoResponseDto userInfo = userLoginService.getUserInfo(accessToken);
 
-        Long userId = userInfo.getId(); //고유 사용자 ID
-        String nickName = userInfo.getKakaoAccount().getProfile().getNickName();
-        String profileImageUrl = userInfo.getKakaoAccount().getProfile().getProfileImageUrl();
-
         return ResponseEntity.ok(Map.of(
-                "user_id", userId,
-                "nickname", nickName,
-                "profile_image_url", profileImageUrl
+                "user_id", userInfo.getId(),
+                "nickname", userInfo.getKakaoAccount().getProfile().getNickName(),
+                "profile_image_url", userInfo.getKakaoAccount().getProfile().getProfileImageUrl()
         ));
     }
 
+    @PostMapping("/token/save")
+    public ResponseEntity<?> saveUserInfo(@RequestHeader("Authorization") String authorization) {
 
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
+        }
+
+        String accessToken = authorization.substring(7);
+        UserInfoResponseDto userInfo = userLoginService.getUserInfo(accessToken);
+
+        User savedUser = userLoginService.saveOrUpdateUser(userInfo);
+
+        Map<String, Object> response = Map.of(
+                "message", "User info saved successfully",
+                "user_info", Map.of(
+                        "kakao_user_id", savedUser.getKakaoUserId(),
+                        "nickname", savedUser.getUserName(),
+                        "profile_image_uri", savedUser.getProfileImageUri()
+                )
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }
