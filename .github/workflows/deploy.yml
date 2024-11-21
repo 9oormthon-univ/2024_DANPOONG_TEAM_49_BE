@@ -38,7 +38,6 @@ jobs:
       - name: Verify Build Output
         run: ls build/libs/
 
-      # EC2로 배포
       - name: Deploy to EC2
         run: |
           echo "${{ secrets.EC2_PEM_KEY }}" > private_key.pem
