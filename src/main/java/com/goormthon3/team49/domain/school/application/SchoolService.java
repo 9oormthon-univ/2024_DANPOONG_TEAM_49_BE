@@ -15,7 +15,7 @@ import java.util.List;
 public class SchoolService {
     private final SchoolRepository schoolRepository;
 
-    private static final double RADIUS = 10.0; // 반경 10km
+    private static final double RADIUS = 3.0; // 반경 3km
 
     public SchoolResponse findClosestSchool(BigDecimal userLatitude, BigDecimal userLongitude) {
         List<School> schools = schoolRepository.findAll();
