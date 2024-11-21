@@ -13,6 +13,12 @@ java {
 	}
 }
 
+jar {
+	archiveBaseName.set("team49Server")
+	archiveVersion.set("0.0.1-SNAPSHOT")
+}
+
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
