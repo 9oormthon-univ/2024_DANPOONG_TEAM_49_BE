@@ -3,53 +3,47 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - master  # master 브랜치에 Push될 때 실행
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set up SSH
-        run: |
-          echo "${{ secrets.EC2_PEM_KEY }}" > ec2-key.pem
-          chmod 600 ec2-key.pem
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_PEM_KEY }}
 
       - name: Deploy to EC2
+        env:
+          EC2_USER: ubuntu # EC2 사용자 이름
+          EC2_HOST: ${{ secrets.EC2_HOST }} # EC2 호스트 주소
+          EC2_PATH: 2024_DANPOONG_TEAM_49_BE # 프로젝트 경로
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REST_API_KEY: ${{ secrets.REST_API_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            set -x
-            # 배포 디렉토리로 이동
-            cd /home/ubuntu
-
-            # .env 파일 백업
-            if [ -f .env ]; then
-              echo "Backing up existing .env file..."
-              cp .env /tmp/.env_backup
-            fi
-
-            # 최신 코드 가져오기
-            echo "Pulling latest code from repository..."
-            git pull origin master
-
-            # .env 파일 복원
-            if [ -f /tmp/.env_backup ]; then
-              echo "Restoring .env file..."
-              mv /tmp/.env_backup .env
-            fi
-
-            # Gradle 빌드
-            echo "Building the project..."
-            ./gradlew build
-
-            # 기존 애플리케이션 종료
-            echo "Stopping existing application..."
-            kill -9 $(lsof -t -i:8080) || true
-
-            # 새 애플리케이션 실행
-            echo "Starting new application..."
-            nohup java -jar build/libs/team49-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+          ssh -o StrictHostKeyChecking=no $EC2_USER@${{ secrets.EC2_HOST }} << 'EOF'
+          cd $EC2_PATH
+          git pull origin master
+          
+          # application.yml 업데이트
+          cat > src/main/resources/application.yml << EOL
+          spring:
+            datasource:
+              url: jdbc:mysql://localhost:3306/${DB_NAME}
+              username: ${DB_USERNAME}
+              password: ${DB_PASSWORD}
+          external:
+            api-key: ${REST_API_KEY}
+          EOL
+          
+          # Gradle 빌드 및 애플리케이션 실행
+          ./gradlew build -x test
+          nohup java -jar build/libs/*.jar > app.log 2>&1 &
           EOF
