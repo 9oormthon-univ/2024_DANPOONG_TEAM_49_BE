@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: team49Server
-          path: build/libs/team49Server-0.0.1-SNAPSHOT.jar
+          path: build/libs/team49-0.0.1-SNAPSHOT.jar
 
   # 배포 **
   deploy:
