@@ -22,17 +22,33 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ec2-key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             # 배포 디렉토리로 이동
-            cd /home/ubuntu/app
-          
+            cd /home/ubuntu
+
+            # .env 파일 백업
+            if [ -f .env ]; then
+              echo "Backing up existing .env file..."
+              cp .env /tmp/.env_backup
+            fi
+
             # 최신 코드 가져오기
+            echo "Pulling latest code from repository..."
             git pull origin master
-          
+
+            # .env 파일 복원
+            if [ -f /tmp/.env_backup ]; then
+              echo "Restoring .env file..."
+              mv /tmp/.env_backup .env
+            fi
+
             # Gradle 빌드
+            echo "Building the project..."
             ./gradlew clean build -x test
-          
+
             # 기존 애플리케이션 종료
+            echo "Stopping existing application..."
             kill -9 $(lsof -t -i:8080) || true
-          
+
             # 새 애플리케이션 실행
+            echo "Starting new application..."
             nohup java -jar build/libs/team49-1.0.0.jar > app.log 2>&1 &
           EOF
