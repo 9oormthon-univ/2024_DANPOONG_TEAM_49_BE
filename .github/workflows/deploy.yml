@@ -43,7 +43,7 @@ jobs:
 
             # Gradle 빌드
             echo "Building the project..."
-            ./gradlew clean build -x test
+            ./gradlew build
 
             # 기존 애플리케이션 종료
             echo "Stopping existing application..."
@@ -51,5 +51,5 @@ jobs:
 
             # 새 애플리케이션 실행
             echo "Starting new application..."
-            nohup java -jar build/libs/team49-1.0.0.jar > app.log 2>&1 &
+            nohup java -jar build/libs/team49-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
           EOF
