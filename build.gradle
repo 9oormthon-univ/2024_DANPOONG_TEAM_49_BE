@@ -6,7 +6,10 @@ plugins {
 
 group = 'com.goormthon3'
 version = '0.0.1-SNAPSHOT'
-
+jar {
+	archiveBaseName.set("team49")
+	archiveVersion.set("1.0.0")
+}
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
