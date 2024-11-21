@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - feature/GOORM-6-github-actions
+      - master
 
 jobs:
   deploy:
