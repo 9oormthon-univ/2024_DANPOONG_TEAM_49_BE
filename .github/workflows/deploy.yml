@@ -65,11 +65,6 @@ jobs:
           name: team49Server
           path: build/libs/
 
-      # EC2에 배포
-      # EC2 SSH 키를 private_key.pem 파일로 저장 ( 위치는 GitHub 서버 )
-      # SCP를 사용하여 JAR 파일을 EC2 서버로 복사
-      # SSH를 사용하여 EC2 서버에 연결하고 현재 실행 중인 Java 프로세스를 종료한 다음 새로운 Java 프로세스 생성 및 실행!!
-      # NLP 적용하면 IP -> 도메인으로 수정 + EC2 늘리면 run 추가
       - name: Deploy to EC2
         run: |
           echo "${{ secrets.EC2_PEM_KEY }}" > private_key.pem
@@ -77,13 +72,13 @@ jobs:
           scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/trelloServer-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/team49Server.jar
            # SSH로 환경변수 설정 및 애플리케이션 실행
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
-    # 환경변수 설정
+
             export DB_HOST=${{ secrets.DB_HOST }}
             export DB_USER=${{ secrets.DB_USER }}
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             export REST_API_KEY=${{ secrets.REST_API_KEY }}
       
-      # 기존 Java 프로세스 종료
+
             pgrep java | xargs kill -9 || true
             
             # 애플리케이션 실행
