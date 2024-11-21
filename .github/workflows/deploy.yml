@@ -16,11 +16,11 @@ jobs:
       - name: Set up SSH
         run: |
           echo "${{ secrets.EC2_PEM_KEY }}" > ec2-key.pem
-          chmod 600 ec2-key.pem
+          chmod 400 ec2-key.pem
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -i ec2-key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -x
             # 배포 디렉토리로 이동
             cd /home/ubuntu
@@ -34,16 +34,16 @@ jobs:
             # 최신 코드 가져오기
             echo "Pulling latest code from repository..."
             git pull origin master
-
+          
             # .env 파일 복원
-            if [ -f /tmp/.env_backup ]; then
+            if [ -f /home/ubuntu/.env_backup ]; then
               echo "Restoring .env file..."
-              mv /tmp/.env_backup .env
+              mv /home/ubuntu/.env_backup .env
             fi
-
+          
             # Gradle 빌드
             echo "Building the project..."
-            ./gradlew clean build -x test
+            ./gradlew build 
 
             # 기존 애플리케이션 종료
             echo "Stopping existing application..."
@@ -51,5 +51,5 @@ jobs:
 
             # 새 애플리케이션 실행
             echo "Starting new application..."
-            nohup java -jar build/libs/team49-1.0.0.jar > app.log 2>&1 &
-          EOF
+            nohup java -jar build/libs/team49-0.0.1-SNAPSHOT.jar > app.log 2>&1 & EOF
+
