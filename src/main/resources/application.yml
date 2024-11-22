@@ -27,7 +27,7 @@ springdoc:
   default-produces-media-type: application/json
 
 kakao:
-  client_id: ${REST_API_KEY}
+  client_id: ${REST_API_KEY:cdd423a129bb50b1413fa39e3a72e142}
   redirect_uri: ${KAKAO_REDIRECT_URI:http://localhost:8080/callback}
 
 
