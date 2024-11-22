@@ -2,7 +2,7 @@ package com.goormthon3.team49.domain.product.application;
 
 import com.goormthon3.team49.domain.product.presentation.dto.ProductDto;
 import com.goormthon3.team49.domain.product.domain.repository.ProductRepository;
-import com.goormthon3.team49.domain.product.domain.repository.ParticipantRepository;
+import com.goormthon3.team49.domain.product.domain.repository.ProductReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ParticipantRepository participantRepository;
+    private final ProductReservationRepository productReservationRepository;
 
     // 최근 상품 조회
     public List<ProductDto> getRecentProducts() {
@@ -29,5 +29,13 @@ public class ProductService {
                 .stream()
                 .map(ProductDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    //전체 상품 조회
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll() // 전체 상품 조회
+                .stream()
+                .map(ProductDto::fromEntity)
+                .collect(Collectors.toList()); // 리스트로 변환
     }
 }

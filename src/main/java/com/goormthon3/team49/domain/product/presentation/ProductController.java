@@ -14,6 +14,12 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+    // 전체 상품 조회
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
     // 최근 상품 조회
     @GetMapping("/recent")
     public ResponseEntity<List<ProductDto>> getRecentProducts() {

@@ -10,15 +10,17 @@ import java.math.BigDecimal;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+
 @Getter
 @Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class School {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "school_id") // school_id 컬럼을 명시적으로 지정
     private Long id;
 
     @Column(nullable = false, length = 2000)
@@ -29,6 +31,10 @@ public class School {
 
     @Column(precision = 9, scale = 6)
     private BigDecimal longitude;
+
+
+    @Column(name = "domain", nullable = false, length = 255) // 도메인 컬럼
+    private String domain;
 
 
 }
