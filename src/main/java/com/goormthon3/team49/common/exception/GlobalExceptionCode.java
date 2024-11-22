@@ -23,4 +23,5 @@ public enum GlobalExceptionCode implements ExceptionCode{
         return this.name();
     }
 
+
 }
