@@ -2,6 +2,7 @@ package com.goormthon3.team49.domain.user.presentation;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,15 @@ public class UserInfoResponseDto {
 
         @JsonProperty("profile")
         private Profile profile;
+
+        @JsonSetter("profile")
+        public void setProfile(Profile profile) {
+            if (profile == null) {
+                this.profile = new Profile(); // 기본값을 설정 (빈 Profile 객체)
+            } else {
+                this.profile = profile;
+            }
+        }
 
         @Getter
         @NoArgsConstructor
