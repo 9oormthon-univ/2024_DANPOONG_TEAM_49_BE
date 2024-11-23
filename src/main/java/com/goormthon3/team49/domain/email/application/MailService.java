@@ -1,5 +1,7 @@
 package com.goormthon3.team49.domain.email.application;
 
+import com.goormthon3.team49.domain.user.domain.User;
+import com.goormthon3.team49.domain.user.infrastructure.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private final String senderEmail = email;
     private final RedisTemplate<String, String> redisTemplate;
+    private final UserRepository userRepository;
 
     // 랜덤으로 숫자 생성
     public String createNumber() {
@@ -78,8 +81,8 @@ public class MailService {
         saveAuthCodeToRedis(sendEmail, number);
     }
 
-    //인증코드 검증
-    public boolean verifyAuthCode(String email, String inputCode) {
+    //인증코드 검증 후 DB 업데이트
+    public boolean verifyAndUpdateEmail(String email, String inputCode, String kakaoUserId) {
 
         String storedCode = redisTemplate.opsForValue().get(email);
 
@@ -92,6 +95,12 @@ public class MailService {
         }
 
         redisTemplate.delete(email);
+
+        User user = userRepository.findByKakaoUserId(Long.parseLong(kakaoUserId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+
+        user.updateEmail(email);
+        userRepository.save(user);
 
         return true;
     }
