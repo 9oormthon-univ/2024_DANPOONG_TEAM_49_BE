@@ -87,7 +87,8 @@ public class UserLoginService {
                         null,
                         true,
                         null,
-                        profileImageUri
+                        profileImageUri,
+                        null
                 ));
 
         user = new User(
@@ -99,7 +100,8 @@ public class UserLoginService {
                 user.getLongitude(),
                 user.getActivated(),
                 user.getCreatedAt(),
-                profileImageUri
+                profileImageUri,
+                user.getEmail()
         );
 
         return userRepository.save(user);
