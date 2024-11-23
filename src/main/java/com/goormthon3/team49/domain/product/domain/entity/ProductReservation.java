@@ -4,9 +4,11 @@ import com.goormthon3.team49.domain.school.domain.School;
 import com.goormthon3.team49.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Entity(name = "ProductReservation")
 public class ProductReservation {

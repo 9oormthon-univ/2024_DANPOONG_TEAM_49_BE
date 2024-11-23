@@ -20,7 +20,7 @@ public class ProductDto {
     private String link;
     private String pickupLocation;
     private Long productImgId;
-    //private String s3Key;
+    private String s3Key;
 
     public static ProductDto fromEntity(Product product, ProductReservation productReservation) {
         return ProductDto.builder()
@@ -34,7 +34,7 @@ public class ProductDto {
                 .link(product.getLink())
                 .pickupLocation(product.getPickupLocation())
                 .productImgId(product.getProductImage() != null ? product.getProductImage().getProductImgId() : null)
-    //            .s3Key(product.getProductImage() != null ? product.getProductImage().getS3Key() : null)
+                .s3Key(product.getProductImage() != null ? product.getProductImage().getS3Key() : null)
                 .build();
     }
 }

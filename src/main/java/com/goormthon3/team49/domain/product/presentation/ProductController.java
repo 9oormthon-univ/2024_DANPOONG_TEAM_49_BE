@@ -1,9 +1,8 @@
 package com.goormthon3.team49.domain.product.presentation;
 
 import com.goormthon3.team49.domain.product.application.ProductService;
-import com.goormthon3.team49.domain.product.presentation.dto.ParticipantDto;
-import com.goormthon3.team49.domain.product.presentation.dto.ProductDto;
-import com.goormthon3.team49.domain.product.presentation.dto.SummaryProductDto;
+import com.goormthon3.team49.domain.product.domain.entity.ProductReservation;
+import com.goormthon3.team49.domain.product.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +48,25 @@ public class ProductController {
     public ResponseEntity<List<ParticipantDto>> getProductParticipants(@PathVariable Long productId) {
         List<ParticipantDto> participants = productService.getProductParticipants(productId);
         return ResponseEntity.ok(participants);
+    }
+
+    //상품 등록하기
+    @PostMapping("/{userId}/leadCreate")
+    public ResponseEntity<AddProductDto> createProduct(@PathVariable Long userId, @RequestBody AddProductRequestDto addProductRequestDto) {
+        // AddProductRequestDto에서 ProductReservation 추출
+        ProductReservation reservation = addProductRequestDto.getReservation(); // getReservation() 메서드는 AddProductRequestDto에 정의되어 있어야 합니다.
+
+        // ProductService 호출 시 ProductReservation 객체 전달
+        AddProductDto createdProduct = productService.createProduct(userId, addProductRequestDto, reservation);
+
+        return ResponseEntity.ok(createdProduct);
+    }
+
+
+    // 상품 구매하기 (예약하기)
+    @PostMapping("/participantCreate")
+    public ResponseEntity<String> participateProduct(@RequestBody ParticipantDto participantDto) {
+        productService.participateProduct(participantDto);
+        return ResponseEntity.ok("ok");
     }
 }
