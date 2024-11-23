@@ -11,14 +11,21 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // 쿠키나 인증 정보를 포함한 요청 허용
-        config.addAllowedOrigin("http://localhost:3000"); // 허용할 Origin
-        config.addAllowedHeader("*"); // 모든 헤더 허용
-        config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE 등)
+        config.setAllowCredentials(true); // 인증 정보 포함 허용
+        config.addAllowedOrigin("http://localhost:3000"); // Origin 허용
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("OPTIONS"); // 명시적으로 OPTIONS 메서드 포함
+        config.addAllowedHeader("Content-Type"); // Content-Type 명시
+        config.addAllowedHeader("Authorization"); // Authorization 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
+
 
