@@ -45,10 +45,17 @@ public class User {
     @Column(length = 255)
     private String profileImageUri;
 
+    @Column(length = 255)
+    private String email;
+
     @PrePersist
     public void prePersist() {
         if(this.activated == null) {
             this.activated = true;
         }
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
     }
 }
