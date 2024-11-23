@@ -3,6 +3,7 @@ package com.goormthon3.team49.domain.product.presentation;
 import com.goormthon3.team49.domain.product.application.ProductService;
 import com.goormthon3.team49.domain.product.presentation.dto.ParticipantDto;
 import com.goormthon3.team49.domain.product.presentation.dto.ProductDto;
+import com.goormthon3.team49.domain.product.presentation.dto.SummaryProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +18,26 @@ public class ProductController {
 
     // 전체 상품 조회
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<List<SummaryProductDto>> getAllProducts() {
+        List<SummaryProductDto> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 
     // 최근 상품 조회
     @GetMapping("/recent")
-    public ResponseEntity<List<ProductDto>> getRecentProducts() {
-        return ResponseEntity.ok(productService.getRecentProducts());
+    public ResponseEntity<List<SummaryProductDto>> getRecentProducts() {
+        List<SummaryProductDto> recentProducts = productService.getRecentProducts();
+        return ResponseEntity.ok(recentProducts);
     }
 
     // 사용자 관련 상품 조회
     @GetMapping("/{userId}/recent")
-    public ResponseEntity<List<ProductDto>> getUserRelatedProducts(@PathVariable Long userId) {
-        return ResponseEntity.ok(productService.getUserRelatedProducts(userId));
+    public ResponseEntity<List<SummaryProductDto>> getUserRelatedProducts(@PathVariable Long userId) {
+        List<SummaryProductDto> userRelatedProducts = productService.getUserRelatedProducts(userId);
+        return ResponseEntity.ok(userRelatedProducts);
     }
 
-    // 개별 상품 조회 (주최자)
+    // 개별 상품 조회(상세 조회)
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         ProductDto product = productService.getProductById(productId);
@@ -46,5 +50,4 @@ public class ProductController {
         List<ParticipantDto> participants = productService.getProductParticipants(productId);
         return ResponseEntity.ok(participants);
     }
-
 }

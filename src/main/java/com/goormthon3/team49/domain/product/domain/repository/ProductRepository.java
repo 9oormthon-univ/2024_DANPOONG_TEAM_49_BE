@@ -2,7 +2,10 @@ package com.goormthon3.team49.domain.product.domain.repository;
 
 import com.goormthon3.team49.domain.product.domain.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -16,5 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByOrderByCreatedAtDesc();
 
     // 특정 상품 조회
-    Product findByProductId(Long productId);
+    @Query("SELECT p FROM Product p JOIN FETCH p.user WHERE p.productId = :productId")
+    Optional<Product> findByProductId(Long productId);
 }
