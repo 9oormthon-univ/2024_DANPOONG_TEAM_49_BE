@@ -14,11 +14,11 @@ public class SummaryProductDto {
     private int savePrice;
     private int participantCount;
     private Long productImgId;
-    private String s3Key;
+    //private String s3Key;
 
     public static SummaryProductDto fromEntity(Product product) {
         Long productImgId = product.getProductImage() != null ? product.getProductImage().getProductImgId() : null;
-        String s3Key = product.getProductImage() != null ? product.getProductImage().getS3Key() : null;
+    //    String s3Key = product.getProductImage() != null ? product.getProductImage().getS3Key() : null;
 
         return SummaryProductDto.builder()
                 .productId(product.getProductId())
@@ -26,7 +26,7 @@ public class SummaryProductDto {
                 .savePrice(product.getSavePrice())
                 //.participantCount(product.getParticipants().size())  // 수정 필요
                 .productImgId(productImgId)
-                .s3Key(s3Key)
+    //            .s3Key(s3Key)
                 .build();
     }
 }
