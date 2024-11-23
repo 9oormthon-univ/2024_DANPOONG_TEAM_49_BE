@@ -15,7 +15,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")  // 컬럼 이름 명시
+    @Column(name = "product_id")
     private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +23,7 @@ public class Product {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id")  // school_id 외래 키 설정
+    @JoinColumn(name = "school_id")
     private School school;
 
     private String title;
@@ -38,8 +38,10 @@ public class Product {
     private String link;
     private String pickupLocation;
 
-    private Long productImgId;
-    private String s3Key;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productImg_id")
+    private ProductImage productImage;
+
 
     @Column(name = "is_active")
     private boolean isActive;

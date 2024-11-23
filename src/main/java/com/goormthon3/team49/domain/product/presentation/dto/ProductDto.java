@@ -21,9 +21,9 @@ public class ProductDto {
                 .productId(product.getProductId())
                 .title(product.getTitle())
                 .savePrice(product.getSavePrice())
-                //.participantCount(product.getParticipants().size())
-                .productImgId(product.getProductImgId())
-                .s3Key(product.getS3Key())
+//                .participantCount(product.getParticipants().size())
+                .productImgId(product.getProductImage() != null ? product.getProductImage().getProductImgId() : null)
+                .s3Key(product.getProductImage() != null ? product.getProductImage().getS3Key() : null)
                 .build();
     }
 }
