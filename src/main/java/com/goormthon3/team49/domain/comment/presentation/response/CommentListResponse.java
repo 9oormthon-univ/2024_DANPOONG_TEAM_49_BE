@@ -15,8 +15,9 @@ public record CommentListResponse(
                 .product_id(product_id)
                 .comment_count(comment_count)
                 .comments(comments.stream()
-                        .map(comment -> CommentResponse.of(comment, comment.getUser())) // User 객체를 제공
-                        .toList())
+                        .map(CommentResponse::of) // CommentResponse.of(comment) -> 이 부분 수정
+                        .toList())  // 끝에 toList()를 제대로 닫기
                 .build();
     }
 }
+

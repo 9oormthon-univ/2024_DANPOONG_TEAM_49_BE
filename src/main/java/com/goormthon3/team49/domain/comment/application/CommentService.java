@@ -23,10 +23,10 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CommentResponse createComment(Long product_id, CommentRequest request, User user) {
-        Comment comment=Comment.create(request.content(),user,product_id);
+    public CommentResponse createComment(Long product_id, CommentRequest request, String username) {
+        Comment comment=Comment.create(request.content(),username,product_id);
         commentRepository.save(comment);
-        return CommentResponse.of(comment,user);
+        return CommentResponse.of(comment);
     }
 
     @Transactional

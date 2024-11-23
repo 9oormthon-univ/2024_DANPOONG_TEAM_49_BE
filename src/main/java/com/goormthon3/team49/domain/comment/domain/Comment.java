@@ -16,25 +16,23 @@ public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long commentId;
 
     @Column(nullable = false, length = 2000)
     private String content;
 
-    @ManyToOne
-    @JoinColumn
-    private User user;
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private Long productId;
 
 
-    public static Comment create(String content, User user, Long product_id) {
+    public static Comment create(String content, String username, Long product_id) {
         return Comment.builder()
                 .content(content)
-                .user(user)
+                .username(username)
                 .productId(product_id)
                 .build();
     }
-
 }

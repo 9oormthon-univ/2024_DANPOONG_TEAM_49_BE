@@ -35,8 +35,8 @@ public class CommentController {
 
         String token = authHeader.substring(7);
         Long kakaouserID=userLoginService.getKakaoUserIdFromAccessToken(token);
-        User user=userLoginService.findUserByFromKakaoUserId(kakaouserID);
-        CommentResponse response = commentService.createComment(productId, request, user);
+        String username=userLoginService.findUserByFromKakaoUserId(kakaouserID).getUserName();
+        CommentResponse response = commentService.createComment(productId, request, username);
 
         return ResponseEntity.status(CREATED).body(response);
     }

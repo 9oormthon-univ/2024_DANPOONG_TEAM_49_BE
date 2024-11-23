@@ -25,15 +25,6 @@ public class UserInfoResponseDto {
         @JsonProperty("profile")
         private Profile profile;
 
-        @JsonSetter("profile")
-        public void setProfile(Profile profile) {
-            if (profile == null) {
-                this.profile = new Profile(); // 기본값을 설정 (빈 Profile 객체)
-            } else {
-                this.profile = profile;
-            }
-        }
-
         @Getter
         @NoArgsConstructor
         @JsonIgnoreProperties(ignoreUnknown = true)
