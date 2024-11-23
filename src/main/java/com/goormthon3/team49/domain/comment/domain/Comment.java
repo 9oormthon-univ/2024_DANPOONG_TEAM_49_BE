@@ -1,6 +1,7 @@
 package com.goormthon3.team49.domain.comment.domain;
 
 import com.goormthon3.team49.common.domain.BaseTimeEntity;
+import com.goormthon3.team49.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,20 +21,18 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false, length = 2000)
     private String content;
 
-    @Column(nullable = false)
-    private Long user_id;
-
-    @Column(nullable = false, length = 2000)
-    private String username;
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
     @Column(nullable = false)
     private Long productId;
 
-    public static Comment create(String content, Long user_id, String username, Long product_id) {
+
+    public static Comment create(String content, User user, Long product_id) {
         return Comment.builder()
                 .content(content)
-                .user_id(user_id)
-                .username(username)
+                .user(user)
                 .productId(product_id)
                 .build();
     }

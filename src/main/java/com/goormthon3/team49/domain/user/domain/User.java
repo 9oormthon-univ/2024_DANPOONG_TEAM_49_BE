@@ -36,6 +36,8 @@ public class User {
 
     private Boolean activated;
 
+
+
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdAt;

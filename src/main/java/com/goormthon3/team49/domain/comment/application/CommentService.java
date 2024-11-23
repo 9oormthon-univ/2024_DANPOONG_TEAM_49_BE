@@ -5,6 +5,9 @@ import com.goormthon3.team49.domain.comment.domain.CommentRepository;
 import com.goormthon3.team49.domain.comment.presentation.request.CommentRequest;
 import com.goormthon3.team49.domain.comment.presentation.response.CommentListResponse;
 import com.goormthon3.team49.domain.comment.presentation.response.CommentResponse;
+import com.goormthon3.team49.domain.user.application.UserLoginService;
+import com.goormthon3.team49.domain.user.domain.User;
+import com.goormthon3.team49.domain.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comments;
 import org.springframework.stereotype.Service;
@@ -16,14 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final UserLoginService userLoginService;
+    private final UserRepository userRepository;
 
     @Transactional
-    public CommentResponse createComment(Long product_id, CommentRequest request) {
-        Long user_id = 1L; //UserDetailService 생성되면 로직 업데이트 예정
-        String username="홍길동"; //UserDetailService 생성되면 로직 업데이트 예정
-        Comment comment=Comment.create(request.content(),user_id,username,product_id);
-        commentRepository.save(comment).getId();
-        return CommentResponse.of(comment);
+    public CommentResponse createComment(Long product_id, CommentRequest request, User user) {
+        Comment comment=Comment.create(request.content(),user,product_id);
+        commentRepository.save(comment);
+        return CommentResponse.of(comment,user);
     }
 
     @Transactional
@@ -32,6 +35,5 @@ public class CommentService {
         Long comment_count=Long.valueOf(comments.size());
         return CommentListResponse.of(product_id,comment_count,comments);
     }
-
 
 }

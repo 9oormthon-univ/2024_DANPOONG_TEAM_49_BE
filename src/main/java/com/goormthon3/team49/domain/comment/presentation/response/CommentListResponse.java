@@ -10,12 +10,12 @@ public record CommentListResponse(
         Long comment_count,
         List<CommentResponse> comments
 ) {
-    public static CommentListResponse of(Long product_id,Long comment_count,List<Comment> comments) {
+    public static CommentListResponse of(Long product_id, Long comment_count, List<Comment> comments) {
         return CommentListResponse.builder()
                 .product_id(product_id)
                 .comment_count(comment_count)
                 .comments(comments.stream()
-                        .map(CommentResponse::of)
+                        .map(comment -> CommentResponse.of(comment, comment.getUser())) // User 객체를 제공
                         .toList())
                 .build();
     }
