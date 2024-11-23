@@ -3,18 +3,27 @@ package com.goormthon3.team49.domain.email.application;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class MailService {
 
+    @Value("${EMAIL}")
+    private String email;
+
     private final JavaMailSender javaMailSender;
-    private static final String senderEmail = "GOORM.DANPOONG49@gmail.com";
+    private final String senderEmail = email;
+    private final RedisTemplate<String, String> redisTemplate;
 
     // 랜덤으로 숫자 생성
     public String createNumber() {
@@ -48,19 +57,42 @@ public class MailService {
         return message;
     }
 
-    // 메일 발송
-    public String sendSimpleMessage(String sendEmail) throws MessagingException {
-        String number = createNumber(); // 랜덤 인증번호 생성
+    //인증코드 생성 및 Redis 저장
+    public void saveAuthCodeToRedis(String email, String authCode) {
+        redisTemplate.opsForValue().set(email, authCode, 3, TimeUnit.MINUTES); //TTL 3분
+    }
 
-        MimeMessage message = createMail(sendEmail, number); // 메일 생성
+    //메일 발송
+    public void sendVerificationEmail(String sendEmail) throws MessagingException {
+        String number = createNumber();
+
+        MimeMessage message = createMail(sendEmail, number);
         try {
-            javaMailSender.send(message); // 메일 발송
+            javaMailSender.send(message);
         } catch (MailException e) {
             e.printStackTrace();
 
             throw new IllegalArgumentException("메일 발송 중 오류가 발생했습니다.");
         }
 
-        return number; // 생성된 인증번호 반환
+        saveAuthCodeToRedis(sendEmail, number);
+    }
+
+    //인증코드 검증
+    public boolean verifyAuthCode(String email, String inputCode) {
+
+        String storedCode = redisTemplate.opsForValue().get(email);
+
+        if (storedCode == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증 코드가 만료되었거나 존재하지 않습니다.");
+        }
+
+        if (!storedCode.equals(inputCode)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다.");
+        }
+
+        redisTemplate.delete(email);
+
+        return true;
     }
 }
