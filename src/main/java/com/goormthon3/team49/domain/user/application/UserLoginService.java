@@ -1,5 +1,6 @@
 package com.goormthon3.team49.domain.user.application;
 
+
 import com.goormthon3.team49.domain.user.domain.User;
 import com.goormthon3.team49.domain.user.infrastructure.UserRepository;
 import com.goormthon3.team49.domain.user.presentation.UserInfoResponseDto;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Service
 public class UserLoginService {
@@ -112,4 +115,13 @@ public class UserLoginService {
 
         return kakaoUserId;
     }
+
+    public User findUserByFromKakaoUserId(Long kakaoUserId) {
+        return userRepository.findByKakaoUserId(kakaoUserId)
+                .orElseThrow(() -> new RuntimeException("User not found with Kakao User ID: " + kakaoUserId));
+    }
+
+
+
+
 }
