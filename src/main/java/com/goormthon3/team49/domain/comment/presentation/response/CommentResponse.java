@@ -16,12 +16,11 @@ public record CommentResponse(
         @DateTimeFormat(pattern="yyyy-MM-dd")
         String createdAt
 ) {
-    public static CommentResponse of(Comment comment, User user) {
+    public static CommentResponse of(Comment comment) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return CommentResponse.builder()
-                .comment_id(comment.getId())
-                .user_id(user.getUserId())
-                .username(user.getUserName())
+                .comment_id(comment.getCommentId())
+                .username(comment.getUsername())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt().format(formatter))
                 .build();
