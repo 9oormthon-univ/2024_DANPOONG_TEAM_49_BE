@@ -105,4 +105,11 @@ public class UserLoginService {
         return userRepository.save(user);
     }
 
+    public Long getKakaoUserIdFromAccessToken(String accessToken) {
+
+        UserInfoResponseDto userInfo = getUserInfo(accessToken);
+        Long kakaoUserId = userInfo.getId();
+
+        return kakaoUserId;
+    }
 }

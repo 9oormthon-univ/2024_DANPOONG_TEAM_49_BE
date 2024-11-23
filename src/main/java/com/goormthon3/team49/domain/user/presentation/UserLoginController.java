@@ -78,4 +78,18 @@ public class UserLoginController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/kakao-user-id")
+    public ResponseEntity<?> getKakaoUserId(@RequestHeader("Authorization") String authorization) {
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
+        }
+
+        String accessToken = authorization.substring(7);
+        Long kakaoUserId = userLoginService.getKakaoUserIdFromAccessToken(accessToken);
+
+        return ResponseEntity.ok(Map.of("kakao_user_id", kakaoUserId));
+    }
+
 }
