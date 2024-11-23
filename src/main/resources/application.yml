@@ -27,8 +27,20 @@ springdoc:
   default-produces-media-type: application/json
 
 kakao:
-  client_id: ${REST_API_KEY:cdd423a129bb50b1413fa39e3a72e142}
+  client_id: ${REST_API_KEY}
   redirect_uri: ${KAKAO_REDIRECT_URI:http://localhost:8080/callback}
 
+# AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2  # 버킷의 리전
+    s3:
+      bucket: danpoongteam49   # 버킷 이름
+    stack:
+      auto: false
 
 

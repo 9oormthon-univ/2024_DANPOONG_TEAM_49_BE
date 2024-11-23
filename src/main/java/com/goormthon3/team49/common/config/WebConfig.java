@@ -1,4 +1,4 @@
-package com.goormthon3.team49.common.auth;
+package com.goormthon3.team49.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

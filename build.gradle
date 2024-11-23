@@ -49,6 +49,18 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+
+
+	//AWS-S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// Spring Cloud AWS Starter
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// AWS SDK for S3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.418'  // 최신 버전으로 변경 가능
+
+	// 전체 AWS SDK (필요 시)
+	// implementation 'com.amazonaws:aws-java-sdk:1.12.418'
 }
 
 tasks.named('test') {
