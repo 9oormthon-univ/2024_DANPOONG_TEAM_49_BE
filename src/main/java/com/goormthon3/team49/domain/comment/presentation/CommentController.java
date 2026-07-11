@@ -25,17 +25,9 @@ public class CommentController {
     @PostMapping("/{productId}/createComment")
     public ResponseEntity<CommentResponse> createReview(
             @PathVariable Long productId,
-            @RequestBody CommentRequest request,
-            HttpServletRequest httpServletRequest
+            @RequestBody CommentRequest request
     ) {
-        String authHeader = httpServletRequest.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization header is missing or invalid");
-        }
-
-        String token = authHeader.substring(7);
-        Long kakaouserID=userLoginService.getKakaoUserIdFromAccessToken(token);
-        String username=userLoginService.findUserByFromKakaoUserId(kakaouserID).getUserName();
+        String username=userLoginService.findUserByFromKakaoUserId(request.kakaoId()).getUserName();
         CommentResponse response = commentService.createComment(productId, request, username);
 
         return ResponseEntity.status(CREATED).body(response);
@@ -51,18 +43,4 @@ public class CommentController {
     }
 
 
-    @GetMapping("/who")
-    public String who(
-            HttpServletRequest httpServletRequest
-    ) {
-        String authHeader = httpServletRequest.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization header is missing or invalid");
-        }
-
-        String token = authHeader.substring(7);
-        Long kakaouserID=userLoginService.getKakaoUserIdFromAccessToken(token);
-        User user=userLoginService.findUserByFromKakaoUserId(kakaouserID);
-        return user.getUserName();
-    }
 }

@@ -6,7 +6,6 @@ import com.goormthon3.team49.domain.user.infrastructure.UserRepository;
 import com.goormthon3.team49.domain.user.presentation.UserInfoResponseDto;
 import com.goormthon3.team49.domain.user.presentation.UserLoginResponseDto;
 import io.netty.handler.codec.http.HttpHeaderValues;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 @Service
 public class UserLoginService {
